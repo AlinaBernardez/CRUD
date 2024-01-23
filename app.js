@@ -47,26 +47,35 @@ app.post('/usuarios', (req, res) => {
 app.get('/usuarios/:nombre', (req, res) => {
     const {nombre} = req.params
     let resultados = usuarios.filter(user => user.nombre == nombre)
-    if(resultados) {
+    if(resultados.length > 0) {
         res.status(200).json(resultados)
     }
     else {
-        res.status(500).json({message: 'Error!!'})
+        res.status(404).json({message: 'Jugador no encontrado!!'})
     }
 });
 
 app.put('/usuarios/:nombre', (req, res) => {
     const {nombre} = req.params
     const toChange = usuarios.find(usuario => usuario.nombre == nombre)
-    toChange.edad = 35
+    if(!toChange) {
+        res.status(404).json({message: 'Jugador no encontrado!!'})
+    }
+    toChange.edad = req.body.edad
+    toChange.lugarProcedencia = req.body.pais
     res.json(usuarios)
 });
 
 app.delete('/usuarios/:nombre', (req, res) => {
     const {nombre} = req.params
     const nameIndex = usuarios.findIndex(user =>  user.nombre == nombre)
-    usuarios.splice(nameIndex, 1)
-    res.json(usuarios)
+    if(nameIndex != -1) {
+        usuarios.splice(nameIndex, 1)
+        res.json(usuarios)
+    }
+    else {
+        res.status(404).json({message: 'Jugador no encontrado!!'})
+    }
 });
 
 app.listen(5000, () => {
