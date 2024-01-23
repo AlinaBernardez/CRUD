@@ -30,11 +30,11 @@ app.get('/', (req, res) => {
     </form>
     <a href='/usuarios'>Usuarios json<a>
     `)
-})
+});
 
 app.get('/usuarios', (req, res) => {
     res.json(usuarios);
-})
+});
 
 app.post('/usuarios', (req, res) => {
     const nuevo = {
@@ -45,7 +45,7 @@ app.post('/usuarios', (req, res) => {
     };
     usuarios.push(nuevo);
     res.redirect('/');
-})
+});
 
 app.get('/usuarios/:nombre', (req, res) => {
     const {nombre} = req.params
@@ -60,16 +60,27 @@ app.get('/usuarios/:nombre', (req, res) => {
             <p>${result.lugarProcedencia}</p>`
             })}
         </div>
-    `)
+        `)
     }
     else {
         res.send(`
         <p>Ese jugador no existe</p>
         `)
     }
+});
 
-})
+app.put('/usuarios/:nombre', (req, res) => {
+    const {nombre} = req.body
+});
+
+app.delete('/usuarios/:nombre', (req, res) => {
+    const {nombre} = req.params
+
+    const nameIndex = usuarios.findIndex(user =>  user.nombre == nombre)
+    usuarios.splice(nameIndex, 1)
+    res.send('Juador eliminado')
+});
 
 app.listen(3000, () => {
     console.log('Express listening http://localhost:3000')
-})
+});
